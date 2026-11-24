@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 研究所篩選器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap">
+<link rel="stylesheet" href="assets/filter.css">
+</head>
+<body class="final">
+
+
+<header class="topbar">
+  <a class="brand" href="index.html">AI 研究所篩選器</a>
+  <nav>
+    <a class="nav" href="index.html">回簡報</a>
+    <a class="nav" href="filter.html">完成版</a>
+  </nav>
+</header>
+<main class="wrap">
+  <section id="gate">
+    <p class="help" style="font-weight:800;letter-spacing:.08em">政大 · 2026/11/24 · 大仁樓 200106</p>
+    <h1>選一個你真的想追的學程</h1>
+    <p class="lede">小組查完一個國家之後，用三步把共用表收成你的一個目標。淺色底、深色字，手機也點得動。</p>
+    <div class="steps">
+      <article class="step-card"><span class="num">1</span><div><b>匯入資料</b><span>貼上試算表的 CSV 網址、貼上 CSV，或先載入範例。</span></div></article>
+      <article class="step-card"><span class="num">2</span><div><b>篩選</b><span>用國家、領域、語言、獎學金、資工背景、學費和截止日縮小範圍。</span></div></article>
+      <article class="step-card"><span class="num">3</span><div><b>選目標</b><span>最多並排 3 個，再把一顆星星設成我的目標。</span></div></article>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="primary" id="start">開始匯入</button>
+      <a class="ghost" href="index.html#10" style="text-decoration:none;display:inline-flex;align-items:center">看怎麼做</a>
+    </div>
+    <p id="resume" hidden class="help">這台電腦留有上次的表。<button type="button" class="ghost" id="resume-btn">繼續上次的篩選</button></p>
+  </section>
+
+  <section id="app" hidden>
+    <section class="zone" id="zone-import">
+      <h2>匯入資料 <em>第 1 步</em></h2>
+      <p class="only-1 placeholder">這一格會放三件事：試算表 CSV 網址、貼上的 CSV，以及一顆很大的「載入範例資料」。這一步只先把位置留好。</p>
+      <div class="needs-2">
+        <label class="field" for="url">貼上已發佈的 CSV 網址</label>
+        <input id="url" type="url" inputmode="url" placeholder="https://docs.google.com/spreadsheets/d/…/pub?output=csv" autocomplete="off">
+        <p class="help">試算表選「檔案 → 共用 → 發佈到網路 → 逗號分隔值」，複製那個網址。讀不到就改下載 CSV 再貼上。</p>
+        <div class="btn-row"><button type="button" class="primary" id="load-url">讀取這個網址</button></div>
+        <label class="field" for="paste">或直接貼上 CSV</label>
+        <textarea id="paste" placeholder="學校,學程,國家,領域,語言,獎學金,需要資工背景,學費,截止日期,官網,已查證"></textarea>
+        <div class="btn-row"><button type="button" class="ghost" id="load-paste">用這段 CSV</button></div>
+        <div class="btn-row"><button type="button" class="primary sample-btn" id="load-sample">載入範例資料</button></div>
+        <p class="help">範例的校名都是假的，學費和截止日是空的。畫面會標「範例」。不要把範例寫進比較表。</p>
+        <p class="help"><a href="sample.csv" download>下載同一份範例 CSV</a></p>
+      </div>
+    </section>
+
+    <section class="zone" id="zone-filter">
+      <h2>篩選 <em>第 2 步</em></h2>
+      <p class="until-3 placeholder">下一步會出現可以點的條件，還有一個會跟著變的數字。</p>
+      <div class="needs-3">
+        <label class="field">國家</label>
+        <div class="chips" id="countries"></div>
+        <label class="field">領域</label>
+        <div class="chips">
+          <button type="button" class="chip" data-field="技術">技術</button>
+          <button type="button" class="chip" data-field="治理人文">治理人文</button>
+          <button type="button" class="chip" data-field="商管">商管</button>
+        </div>
+        <label class="field">語言</label>
+        <div class="chips" id="languages"></div>
+        <div class="chips">
+          <button type="button" class="chip" id="f-scholarship" aria-pressed="false">有獎學金</button>
+          <button type="button" class="chip" id="f-nocs" aria-pressed="false">不需要資工背景</button>
+          <button type="button" class="chip" id="f-deadline" aria-pressed="false">隱藏已截止</button>
+        </div>
+        <label class="field" for="tuition">學費上限 <span id="tuition-label">不限</span></label>
+        <div class="slider-row">
+          <input id="tuition" type="range" min="0" max="2000000" step="50000" value="2000000" aria-describedby="tuition-help">
+        </div>
+        <p class="help" id="tuition-help">照表上的數字粗篩。沒填學費的一律保留。幣別不同時，送件前仍以官網為準。</p>
+      </div>
+    </section>
+
+    <section class="zone" id="zone-results">
+      <h2>選目標 <em>第 3 步</em></h2>
+      <p class="only-1 placeholder">篩完之後，學程會以卡片出現在這裡。你可以比較最多 3 個，再設一顆星星。</p>
+      <div class="needs-2">
+        <p class="count" id="count" aria-live="polite">0 <small>/ 0 個學程</small></p>
+        <div id="status" hidden role="status"></div>
+        <div id="list"></div>
+        <div class="btn-row needs-6">
+          <button type="button" class="primary" id="export">匯出短名單 CSV</button>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section id="compare" hidden>
+    <h2>並排比較</h2>
+    <p class="help">最多 3 個。看完選一顆星星就好。</p>
+    <div id="compare-grid" class="compare-grid"></div>
+    <div class="btn-row">
+      <button type="button" class="ghost" id="close-compare">回到清單</button>
+      <button type="button" class="danger" id="clear-compare">清空比較</button>
+    </div>
+  </section>
+
+  <section id="target-view" hidden>
+    <article class="target-card" id="shot-card">
+      <div id="target-body"></div>
+      <label class="field" for="target-note">我為什麼選它（選填，存在這台電腦）</label>
+      <textarea class="note" id="target-note"></textarea>
+      <div class="btn-row">
+        <button type="button" class="primary" id="copy-target">複製目標卡文字</button>
+        <button type="button" class="ghost" id="shot-target">適合截圖</button>
+        <button type="button" class="ghost" id="close-shot">關閉截圖模式</button>
+        <button type="button" class="ghost" id="back-list">回到清單</button>
+      </div>
+    </article>
+  </section>
+  <p class="footer-note">金額、名額、截止日都可能改。畫面上的數字只來自你貼上的表；範例不帶任何學費或截止日。送件前打開官網再對一次。</p>
+</main>
+<div id="compare-bar" class="compare-bar needs-5" hidden>
+  <strong>已選 <span id="compare-count">0 / 3</span></strong>
+  <button type="button" class="primary" id="open-compare">並排看</button>
+</div>
+
+<script>window.FILTER_STEP = 6;</script>
+<script src="assets/filter.js"></script>
+</body>
+</html>
