@@ -110,7 +110,12 @@ pre.prompt {
   border: 3px solid var(--accent);
 }
 .qrbox { display: flex; gap: 28px; align-items: center; background: #fff; border-radius: 20px; padding: 18px; border: 1px solid var(--line); }
-.qrbox img { width: 280px; height: 280px; object-fit: contain; background: #fff; }
+.qrbox img { width: 320px; height: 320px; object-fit: contain; background: #fff; }
+.roomcode { font-family: "Noto Serif TC", serif; font-size: 84px; font-weight: 900; letter-spacing: .06em; line-height: .95; color: var(--ink); }
+.method { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mini { padding: 14px 16px; }
+.mini h3 { font-size: 24px; }
+.mini p { font-size: 18px; line-height: 1.45; }
 .credits { overflow: auto; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 8px 18px; }
 .credits li { font-size: 18px; padding: 6px 0; border-bottom: 1px solid var(--line); list-style: none; }
 .credits a { font-weight: 700; }
@@ -135,7 +140,7 @@ html.m #stage { width: 100%; height: auto; min-height: 100%; transform: none !im
 html.m .slide { position: relative; display: none; min-height: 100vh; overflow: visible; }
 html.m .slide.active { display: block; }
 html.m .pad, html.m .hero .copy { padding: 28px 18px 110px 22px; height: auto; }
-html.m .hero, html.m .split, html.m .g2, html.m .g3, html.m .g5, html.m .g6, html.m .photos, html.m .tips, html.m .flow .row, html.m .qrbox {
+html.m .hero, html.m .split, html.m .g2, html.m .g3, html.m .g5, html.m .g6, html.m .photos, html.m .tips, html.m .flow .row, html.m .qrbox, html.m .method {
   display: flex; flex-direction: column; height: auto;
 }
 html.m h1 { font-size: 36px; }
@@ -152,6 +157,7 @@ html.m .preview .open { position: static; display: inline-flex; }
 html.m .clock { font-size: 18px; min-height: 48px; }
 html.m .biglink { font-size: 18px; min-height: 56px; }
 html.m .qrbox img { width: 220px; height: 220px; }
+html.m .roomcode { font-size: 56px; }
 html.m #hud { position: fixed; left: 0; right: 0; bottom: 0; justify-content: center; padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); background: rgba(246,243,238,.96); }
 html.m .foot { position: static; padding: 8px 18px 0 22px; }
 html.m .slide:before { width: 6px; }
